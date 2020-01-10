@@ -70,15 +70,14 @@ $config = [
     ]
 ];
 
-$ret = getPrizeRand($config);
+//$ret = getPrizeRand($config);
 
-
-$s = [];
-for ($i=0;$i<1000000;$i++){
-    $s[] = getPrizeRand($config);
+$res = array_fill(1, 9, 0);
+for ($i=0;$i<10000000;$i++){
+    $ret = getPrizeRand($config);
+    $res[$ret]++;
 }
-
-var_dump(array_count_values($s));exit;
+var_dump($res);
 
 
 function getPrizeRand($config)
@@ -95,7 +94,7 @@ function getPrizeRand($config)
     shuffle($config);
     //概率数组循环
     foreach ($config as $key => $proCur) {
-        $randNum = mt_rand(0, $proSum);
+        $randNum = mt_rand(1, $proSum);
         //如果随机数，小于等于当前奖品概率，就中奖，否则减去当前概率
         if ($randNum <= $proCur['probability']) {
             $result = $proCur['pos'];
@@ -105,7 +104,7 @@ function getPrizeRand($config)
             $proSum -= $proCur['probability'];
         }
     }
-    unset($proArr);
+    unset($config);
     return $result;
 }
 
